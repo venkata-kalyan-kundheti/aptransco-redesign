@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block style guide page from search engines (dev-only reference page)
+Disallow: /style-guide
+
+Sitemap: https://aptransco.gov.in/sitemap.xml

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="APTRANSCO logo">
+  <title>APTRANSCO</title>
+  <!-- Navy circle background -->
+  <circle cx="60" cy="60" r="60" fill="#0C2D5E"/>
+  <!-- Gold lightning bolt — power/electricity symbol -->
+  <path d="M68 14 L44 62 H62 L52 106 L82 50 H64 Z" fill="#F5A623"/>
+</svg>

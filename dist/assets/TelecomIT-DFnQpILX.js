@@ -1,0 +1,1 @@
+import{j as t}from"./react-vendor-DSKy_jo4.js";import{D as m}from"./_DepartmentTemplate-Dyg2zwko.js";import"./router-vendor-1GS4ssWD.js";import"./PageShell-DzaIoCer.js";import"./icons-vendor-wC02zTb8.js";import"./departments-C5aKUW-Z.js";function a(){return t.jsx(m,{slug:"telecom-it"})}export{a as default};

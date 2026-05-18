@@ -1,0 +1,485 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   APTRANSCO Website — Global Stylesheet
+   Performance strategy:
+   · CSS custom properties (variables) defined once on :root — browser caches
+     a single value, reduces stylesheet parse time, enables GPU-friendly reuse.
+   · Tailwind JIT purges unused utilities at build time (zero unused CSS in prod).
+   · No @import rules — all fonts loaded via <link> in index.html.
+   · All animations use transform/opacity only (compositor-only, no layout thrash).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── 2. Design tokens as CSS custom properties ──────────────────────────── */
+/*
+  Defining colours as CSS variables means:
+  a) A single parse by the browser — never repeated per-rule.
+  b) Dark-mode or high-contrast overrides need only override :root.
+  c) JS can read/write them via getComputedStyle() without class toggling.
+  d) Smaller computed stylesheet (browser deduplicates variable references).
+*/
+:root {
+  /* Navy palette */
+  --clr-navy-50:  #EEF2F9;
+  --clr-navy-100: #D5DFF0;
+  --clr-navy-200: #ABBFE1;
+  --clr-navy-300: #7A96CC;
+  --clr-navy-400: #4A6DB5;
+  --clr-navy-500: #1A4A8A;
+  --clr-navy-600: #163D74;
+  --clr-navy-700: #0C2D5E;
+  --clr-navy-800: #091F42;
+  --clr-navy-900: #050F21;
+
+  /* Gold palette */
+  --clr-gold-50:  #FFF8EC;
+  --clr-gold-100: #FDEDC8;
+  --clr-gold-200: #FBDB94;
+  --clr-gold-300: #F9C85F;
+  --clr-gold-400: #F5A623;
+  --clr-gold-500: #E0901A;
+  --clr-gold-600: #B97010;
+  --clr-gold-700: #8A500A;
+
+  /* Slate palette */
+  --clr-slate-50:  #F4F6FA;
+  --clr-slate-100: #E8ECF4;
+  --clr-slate-200: #D0D7E8;
+  --clr-slate-300: #A8B4CC;
+  --clr-slate-400: #7A8BAA;
+  --clr-slate-500: #546480;
+  --clr-slate-600: #3D4D66;
+  --clr-slate-700: #2A3650;
+
+  /* Semantic */
+  --clr-success:       #1A7A3F;
+  --clr-success-light: #EAF5EE;
+  --clr-warning:       #B97010;
+  --clr-warning-light: #FFF8EC;
+  --clr-danger:        #9B1D1D;
+  --clr-danger-light:  #FDF0F0;
+  --clr-info:          #1A4A8A;
+  --clr-info-light:    #EEF2F9;
+
+  /* Spacing rhythm — 8px base grid */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+
+  /* Shadow — navy-tinted (not plain black) for government look */
+  --shadow-card:    0 1px 3px 0 rgb(12 45 94 / 0.08), 0 1px 2px -1px rgb(12 45 94 / 0.06);
+  --shadow-card-md: 0 4px 6px -1px rgb(12 45 94 / 0.10), 0 2px 4px -2px rgb(12 45 94 / 0.08);
+  --shadow-nav:     0 2px 8px 0 rgb(12 45 94 / 0.15);
+
+  /* Transitions — use CSS variables so all timings are consistent */
+  --transition-fast: 150ms ease;
+  --transition-med:  250ms ease;
+
+  /* Z-index scale */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-header:   300;
+  --z-overlay:  400;
+  --z-modal:    500;
+  --z-toast:    600;
+}
+
+/* ─── 3. Base layer overrides ─────────────────────────────────────────────── */
+@layer base {
+  /*
+    font-display: optional — system font renders immediately while Inter loads.
+    This is the single biggest perceived-performance win on 2G/3G connections.
+  */
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    /* Prevent layout shift from scrollbar appearing/disappearing */
+    overflow-y: scroll;
+    /* GPU text rendering hint — smoother on low-DPI screens */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Fluid base font — 15px on small screens, 16px on desktop */
+    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1rem);
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-700 leading-relaxed;
+    min-height: 100vh;
+    /* Prevent horizontal scroll — common issue on mobile govt sites */
+    overflow-x: hidden;
+  }
+
+  /* Heading defaults — use CSS var for colour to enable theming */
+  h1 { @apply text-3xl font-bold   leading-tight; color: var(--clr-navy-700); }
+  h2 { @apply text-2xl font-semibold leading-tight; color: var(--clr-navy-700); }
+  h3 { @apply text-xl  font-semibold leading-tight; color: var(--clr-navy-700); }
+  h4 { @apply text-base font-semibold; color: var(--clr-navy-700); }
+  h5 { @apply text-sm  font-semibold; color: var(--clr-navy-700); }
+  h6 { @apply text-xs  font-semibold uppercase tracking-wide; color: var(--clr-navy-600); }
+
+  /* Link defaults — scoped overrides in components */
+  a {
+    color: var(--clr-navy-500);
+    text-underline-offset: 0.125rem;
+    transition: color var(--transition-fast);
+  }
+  a:hover { color: var(--clr-navy-700); }
+
+  /* ── Global focus ring ── WCAG 2.1 AA (3:1 contrast minimum) ─────────── */
+  /*
+    Gold ring on navy background has ~6:1 contrast ratio — exceeds AA.
+    ring-offset-2 ensures it's visible on any background colour.
+  */
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--clr-gold-400);
+  }
+
+  /* Remove default list styles for nav lists */
+  nav ul,
+  nav ol { list-style: none; padding: 0; margin: 0; }
+
+  /* Images — default lazy + responsive */
+  img {
+    max-width: 100%;
+    height: auto;
+    /* Prevent layout shift before image loads */
+    display: block;
+  }
+
+  /* Form base reset */
+  input, textarea, select { font-family: var(--font-sans); }
+
+  /* Table */
+  table { @apply w-full border-collapse; }
+
+  /* ── Reduced motion — accessibility ───────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ─── 4. Component layer ──────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Skip link (accessibility) ─────────────────────────────────────────── */
+  .skip-link {
+    @apply sr-only;
+    /* When focused, becomes visible — critical for keyboard/screen reader users */
+  }
+  .skip-link:focus {
+    @apply not-sr-only absolute top-4 left-4 z-[600];
+    @apply px-4 py-2 rounded text-sm font-semibold;
+    background: var(--clr-gold-400);
+    color: var(--clr-navy-700);
+    text-decoration: none;
+  }
+
+  /* ── Site container ────────────────────────────────────────────────────── */
+  .container-site {
+    @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────────────────────
+     Base `.btn` is never used alone — always combined with a variant.
+     min-height: 44px = WCAG 2.5.5 touch target size.
+  ────────────────────────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    min-height: 2.75rem;    /* 44px touch target */
+    font-size: 0.875rem;    /* text-sm */
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast),
+                box-shadow var(--transition-fast);
+    /* Focus ring defined globally via *:focus-visible */
+    text-decoration: none;
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn-primary {
+    @apply btn;
+    background: var(--clr-gold-400);
+    color: var(--clr-navy-700);
+    border: 1px solid transparent;
+    font-weight: 600;
+  }
+  .btn-primary:hover  { background: var(--clr-gold-500); }
+  .btn-primary:active { background: var(--clr-gold-600); }
+
+  .btn-secondary {
+    @apply btn;
+    background: transparent;
+    color: var(--clr-navy-500);
+    border: 1px solid var(--clr-navy-500);
+  }
+  .btn-secondary:hover  { background: var(--clr-navy-50); }
+  .btn-secondary:active { background: var(--clr-navy-100); }
+
+  .btn-ghost {
+    @apply btn;
+    background: transparent;
+    color: var(--clr-navy-500);
+    border: 1px solid transparent;
+  }
+  .btn-ghost:hover  { background: var(--clr-navy-50); }
+  .btn-ghost:active { background: var(--clr-navy-100); }
+
+  .btn-sm {
+    padding: var(--space-1) var(--space-3);
+    font-size: 0.75rem;
+    min-height: 2.25rem;    /* 36px — still usable on touch */
+  }
+  .btn-lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: 1rem;
+    min-height: 3.25rem;
+  }
+
+  /* ── Cards ──────────────────────────────────────────────────────────────── */
+  .card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--clr-slate-200);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  .card-hover {
+    @apply card;
+    transition: box-shadow var(--transition-med), transform var(--transition-med);
+  }
+  .card-hover:hover {
+    box-shadow: var(--shadow-card-md);
+    /* Subtle lift — compositor-only, does not trigger layout */
+    transform: translateY(-1px);
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    line-height: 1.4;
+    /* GPU-composite: only color change, no geometry */
+  }
+
+  .badge-tender    { background: var(--clr-gold-50);         color: var(--clr-gold-700); }
+  .badge-circular  { background: var(--clr-navy-50);         color: var(--clr-navy-600); }
+  .badge-new       { background: var(--clr-success-light);   color: var(--clr-success); }
+  .badge-urgent    { background: var(--clr-danger-light);    color: var(--clr-danger); }
+  .badge-info      { background: var(--clr-info-light);      color: var(--clr-info); }
+  .badge-open      { background: var(--clr-success-light);   color: var(--clr-success); }
+  .badge-closed    { background: var(--clr-slate-100);       color: var(--clr-slate-500); }
+  .badge-upcoming  { background: var(--clr-warning-light);   color: var(--clr-warning); }
+
+  /* ── Section headings ────────────────────────────────────────────────────── */
+  .section-title    { @apply text-2xl font-semibold leading-tight; color: var(--clr-navy-700); }
+  .section-subtitle { @apply text-sm mt-1; color: var(--clr-slate-400); }
+
+  /* ── Divider ─────────────────────────────────────────────────────────────── */
+  .divider { border-top: 1px solid var(--clr-slate-200); margin: var(--space-8) 0; }
+
+  /* ── Form input ──────────────────────────────────────────────────────────── */
+  .input {
+    display: block;
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--clr-slate-700);
+    background: #fff;
+    border: 1px solid var(--clr-slate-200);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    /* Don't use outline — custom focus ring handles this */
+    outline: none;
+  }
+  .input::placeholder { color: var(--clr-slate-300); }
+  .input:focus {
+    border-color: var(--clr-navy-500);
+    box-shadow: 0 0 0 3px rgb(26 74 138 / 0.12);
+  }
+  .input:disabled {
+    background: var(--clr-slate-100);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  /* ── Breadcrumb ──────────────────────────────────────────────────────────── */
+  .breadcrumb-item      { @apply text-sm transition-colors duration-150; color: var(--clr-slate-400); }
+  .breadcrumb-item:hover { color: var(--clr-navy-500); }
+  .breadcrumb-separator { color: var(--clr-slate-300); margin: 0 var(--space-1); user-select: none; }
+
+  /* ── Page banner ─────────────────────────────────────────────────────────── */
+  .page-banner {
+    background: var(--clr-navy-700);
+    color: #fff;
+    padding: 2rem 0;
+  }
+  @media (min-width: 768px) { .page-banner { padding: 3rem 0; } }
+
+  /* ── Navigation item ─────────────────────────────────────────────────────── */
+  .nav-item {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+    /* Ensure min touch target on mobile */
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  .nav-item:hover { background: var(--clr-navy-600); color: #fff; }
+
+  .nav-item-active {
+    background: var(--clr-gold-400);
+    color: var(--clr-navy-700);
+    font-weight: 600;
+  }
+  .nav-item-active:hover {
+    background: var(--clr-gold-400);
+    color: var(--clr-navy-700);
+  }
+
+  /* ── Dropdown panel ──────────────────────────────────────────────────────── */
+  .dropdown-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: var(--space-1);
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-nav);
+    border: 1px solid var(--clr-slate-200);
+    min-width: 200px;
+    padding: var(--space-1) 0;
+    z-index: var(--z-dropdown);
+    /* GPU-composited: will-change avoids main-thread repaints */
+    will-change: opacity, transform;
+  }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    color: var(--clr-slate-700);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-decoration: none;
+  }
+  .dropdown-item:hover { background: var(--clr-navy-50); color: var(--clr-navy-700); }
+
+  /* ── Table ──────────────────────────────────────────────────────────────── */
+  .table-responsive { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--clr-slate-200); }
+  .table-base       { min-width: 100%; border-collapse: collapse; }
+  .table-th         {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--clr-slate-500);
+    background: var(--clr-slate-50);
+    border-bottom: 1px solid var(--clr-slate-200);
+  }
+  .table-td { padding: var(--space-3) var(--space-4); font-size: 0.875rem; color: var(--clr-slate-700); border-bottom: 1px solid var(--clr-slate-100); }
+  .table-tr:nth-child(even) { background: var(--clr-slate-50); }
+  .table-tr:hover           { background: var(--clr-navy-50); }
+}
+
+/* ─── 5. Utilities layer ─────────────────────────────────────────────────── */
+@layer utilities {
+  /* Visually hidden but accessible to screen readers */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  /* Multiline text clamp — CSS-native, no JS needed */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* GPU-composited fade-in — used for lazy-loaded content */
+  .fade-in {
+    animation: fadeIn 0.2s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Smooth-scroll wrapper — for print, turn it off */
+  @media print {
+    .no-print { display: none !important; }
+    /* Expand all collapsed content for printing */
+    [aria-hidden="true"] { display: block !important; }
+    body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+    .page-banner { background: #000 !important; -webkit-print-color-adjust: exact; }
+    a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+  }
+}
