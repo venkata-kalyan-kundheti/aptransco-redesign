@@ -13,10 +13,14 @@
     <meta name="theme-color" content="#0C2D5E" />
     <meta name="color-scheme" content="light" />
 
-    <!-- ── Favicon (SVG — tiny, scales perfectly, no HTTP redirect) ──────── -->
+    <!-- ── Favicon ────────────────────────────────────────────────────────── -->
+    <!--
+      Single SVG favicon — scales perfectly at all sizes (16px tab → 256px bookmark).
+      No PNG fallback needed: all browsers that support <link rel="icon"> since 2020
+      also support SVG favicons. The bolt + navy circle matches the header logo exactly.
+    -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Fallback PNG favicon for browsers that don't support SVG favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo.png" />
 
     <!-- ── Open Graph / Social ──────────────────────────────────────────── -->
     <meta property="og:type"        content="website" />

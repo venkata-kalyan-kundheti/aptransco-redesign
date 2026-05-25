@@ -4,13 +4,13 @@
  */
 
 import { Link } from 'react-router-dom';
-import { BoltIcon } from '@heroicons/react/24/outline';
 import {
   ORG_FULL_NAME,
   ORG_SHORT_NAME,
   ORG_TAGLINE,
   CONTACT,
   FOOTER_LINKS,
+  LOGO_PATH,
 } from '@/utils/constants';
 
 function FooterColumn({ heading, links }) {
@@ -51,9 +51,13 @@ export default function Footer() {
               className="flex items-center gap-2 mb-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded w-fit"
               aria-label={`${ORG_SHORT_NAME} — home`}
             >
-              <div className="w-10 h-10 bg-navy-900 rounded-full flex items-center justify-center" aria-hidden="true">
-                <BoltIcon className="w-5 h-5 text-gold-400" />
-              </div>
+              <img
+                src={LOGO_PATH}
+                alt="APTRANSCO logo"
+                width="40"
+                height="40"
+                className="w-10 h-10 flex-shrink-0"
+              />
               <span className="font-bold text-white text-lg">{ORG_SHORT_NAME}</span>
             </Link>
             <p className="text-sm text-slate-300 leading-relaxed mb-4">

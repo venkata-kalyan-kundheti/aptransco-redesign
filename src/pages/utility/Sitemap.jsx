@@ -20,19 +20,36 @@ const ICON_MAP = {
 
 const EXTRA_PAGES = [
   {
+    heading: 'Stakeholder Services',
+    items: [
+      { label: 'Vendor & Contractor Information', href: '/vendor' },
+      { label: 'Employee Portal',                 href: '/employees' },
+      { label: 'Training / PRTI Programmes',      href: '/training' },
+      { label: 'Grid Map',                        href: '/grid-map' },
+    ],
+  },
+  {
+    heading: 'Compliance & Regulatory',
+    items: [
+      { label: 'Regulatory Compliance Framework', href: '/regulatory-compliance' },
+      { label: 'Power Sector Reports',            href: '/reports/power-sector' },
+    ],
+  },
+  {
     heading: 'Utility Pages',
     items: [
-      { label: 'Search Results', href: '/search' },
-      { label: 'Frequently Asked Questions', href: '/faq' },
-      { label: 'Important Links', href: '/links' },
+      { label: 'Search Results',              href: '/search' },
+      { label: 'Contact & Feedback',          href: '/contact' },
+      { label: 'Frequently Asked Questions',  href: '/faq' },
+      { label: 'Important External Links',    href: '/links' },
     ],
   },
   {
     heading: 'Legal & Accessibility',
     items: [
-      { label: 'Privacy Policy', href: '/privacy-policy' },
-      { label: 'Disclaimer', href: '/disclaimer' },
-      { label: 'Accessibility Statement', href: '/accessibility' },
+      { label: 'Privacy Policy',         href: '/privacy-policy' },
+      { label: 'Disclaimer',             href: '/disclaimer' },
+      { label: 'Accessibility Statement',href: '/accessibility' },
     ],
   },
 ];

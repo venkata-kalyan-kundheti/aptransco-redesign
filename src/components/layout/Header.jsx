@@ -25,13 +25,12 @@ import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  BoltIcon,
   GlobeAltIcon,
   PhoneIcon,
 } from '@heroicons/react/24/outline';
 
 import { NAV_ITEMS, getParentNavItem } from '@/data/navConfig';
-import { ORG_FULL_NAME, ORG_SHORT_NAME, TOP_BAR_LINKS } from '@/utils/constants';
+import { ORG_FULL_NAME, ORG_SHORT_NAME, TOP_BAR_LINKS, LOGO_PATH } from '@/utils/constants';
 
 // ── Tiny hook: close on outside click ─────────────────────────────────────────
 function useOutsideClick(ref, onClose) {
@@ -502,9 +501,13 @@ function MobileMenu({ isOpen, onClose }) {
             className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded"
             aria-label={`${ORG_SHORT_NAME} home`}
           >
-            <div className="w-8 h-8 bg-navy-900 rounded-full flex items-center justify-center" aria-hidden="true">
-              <BoltIcon className="w-5 h-5 text-gold-400" />
-            </div>
+            <img
+              src={LOGO_PATH}
+              alt="APTRANSCO logo"
+              width="32"
+              height="32"
+              className="w-8 h-8 flex-shrink-0"
+            />
             <span className="text-white font-bold text-base">{ORG_SHORT_NAME}</span>
           </Link>
 

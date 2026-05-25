@@ -1,6 +1,7 @@
 /**
  * src/pages/about/ContactDirectory.jsx — Full implementation
  */
+import { useState } from 'react';
 import { PhoneIcon, EnvelopeIcon, MapPinIcon, BuildingOffice2Icon } from '@heroicons/react/24/outline';
 import PageShell from '@/components/layout/PageShell';
 
@@ -40,6 +41,15 @@ const OFFICES = [
   },
 ];
 
+const CIRCLE_OFFICES = [
+  { zone: 'North', name: 'Visakhapatnam', phone: '+91-891-2700110', email: 'se.vsp@aptransco.gov.in' },
+  { zone: 'North', name: 'Srikakulam', phone: '+91-8942-220100', email: 'se.skm@aptransco.gov.in' },
+  { zone: 'South', name: 'Tirupati', phone: '+91-877-2220110', email: 'se.tpt@aptransco.gov.in' },
+  { zone: 'South', name: 'Kadapa', phone: '+91-8562-240100', email: 'se.kdp@aptransco.gov.in' },
+  { zone: 'East', name: 'Vijayawada', phone: '+91-866-2435110', email: 'se.vja@aptransco.gov.in' },
+  { zone: 'East', name: 'Guntur', phone: '+91-863-2220100', email: 'se.gnt@aptransco.gov.in' },
+];
+
 const DEPT_CONTACTS = [
   { dept: 'Chairman & Managing Director',  phone: '+91-866-2577700', email: 'cmd@aptransco.gov.in' },
   { dept: 'Director (Projects)',            phone: '+91-866-2577710', email: 'dir.projects@aptransco.gov.in' },
@@ -54,16 +64,21 @@ const DEPT_CONTACTS = [
 ];
 
 export default function ContactDirectory() {
+  const [activeZone, setActiveZone] = useState('All');
+  const zones = ['All', 'North', 'South', 'East'];
+
+  const filteredCircles = activeZone === 'All' 
+    ? CIRCLE_OFFICES 
+    : CIRCLE_OFFICES.filter(c => c.zone === activeZone);
+
   return (
     <PageShell
       title="Contact Directory"
       description="Official contact information for APTRANSCO's Corporate Office, Zonal Offices, and key departments."
       breadcrumb={[{ label: 'About', href: '/about' }, 'Contact Directory']}
     >
-      {/* Offices */}
       <section aria-labelledby="offices-heading" className="mb-12">
         <h2 id="offices-heading" className="section-title mb-2">Regional Offices</h2>
-        <p className="section-subtitle mb-6">Corporate headquarters and three operational zones</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {OFFICES.map((office) => (
             <div key={office.id} className="card p-5 flex flex-col gap-3">
@@ -86,20 +101,51 @@ export default function ContactDirectory() {
                   <EnvelopeIcon className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
                   <a href={`mailto:${office.email}`} className="text-navy-600 hover:text-navy-800 hover:underline">{office.email}</a>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-4 h-4 text-slate-400 shrink-0 text-xs leading-4 font-bold text-center">⏱</span>
-                  <dd className="text-slate-500 text-xs">{office.hours}</dd>
-                </div>
               </dl>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Department Directory */}
+      <section aria-labelledby="circles-heading" className="mb-12">
+        <h2 id="circles-heading" className="section-title mb-6">Circle Offices</h2>
+        <div className="flex gap-2 mb-6">
+          {zones.map((zone) => (
+            <button
+              key={zone}
+              onClick={() => setActiveZone(zone)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition ${activeZone === zone ? 'bg-navy-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+            >
+              {zone}
+            </button>
+          ))}
+        </div>
+        <div className="table-responsive">
+          <table className="table-base">
+            <thead>
+              <tr>
+                <th className="table-th">Zone</th>
+                <th className="table-th">Circle</th>
+                <th className="table-th">Phone</th>
+                <th className="table-th">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCircles.map((row, idx) => (
+                <tr key={idx} className="table-tr">
+                  <td className="table-td text-sm">{row.zone}</td>
+                  <td className="table-td font-medium text-navy-700">{row.name}</td>
+                  <td className="table-td text-xs font-mono">{row.phone}</td>
+                  <td className="table-td text-xs text-navy-600 underline">{row.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section aria-labelledby="dept-dir-heading">
-        <h2 id="dept-dir-heading" className="section-title mb-2">Departmental Contact Directory</h2>
-        <p className="section-subtitle mb-6">All numbers are at Corporate Office, Vijayawada unless noted</p>
+        <h2 id="dept-dir-heading" className="section-title mb-6">Departmental Contacts</h2>
         <div className="table-responsive">
           <table className="table-base">
             <thead>

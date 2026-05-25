@@ -25,6 +25,7 @@ import {
   MapPinIcon,
   CheckBadgeIcon,
   ClockIcon,
+  BuildingStorefrontIcon,
 } from '@heroicons/react/24/outline';
 
 import { NETWORK_STATS, QUICK_ACCESS_TILES } from '@/utils/constants';
@@ -35,12 +36,13 @@ import TenderCard from '@/components/common/TenderCard';
 
 // ── Icon map for Quick Access tiles ───────────────────────────────────────────
 const ICON_MAP = {
-  DocumentTextIcon: DocumentTextIcon,
-  BellAlertIcon:    BellAlertIcon,
-  EyeIcon:          EyeIcon,
-  BriefcaseIcon:    BriefcaseIcon,
-  FolderOpenIcon:   FolderOpenIcon,
-  PhoneIcon:        PhoneIcon,
+  DocumentTextIcon:       DocumentTextIcon,
+  BellAlertIcon:          BellAlertIcon,
+  EyeIcon:                EyeIcon,
+  BriefcaseIcon:          BriefcaseIcon,
+  FolderOpenIcon:         FolderOpenIcon,
+  PhoneIcon:              PhoneIcon,
+  BuildingStorefrontIcon: BuildingStorefrontIcon,
 };
 
 // ── Hero slides ────────────────────────────────────────────────────────────────

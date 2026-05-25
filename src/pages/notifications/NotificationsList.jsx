@@ -3,8 +3,10 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * Features: Tabs (All/Circulars/Orders/Press Releases/Recruitment/General),
  *           search, date sort, NotificationCard grid, Pagination, EmptyState.
+ *           Reads ?tab= URL param so external links can deep-link to a tab.
  */
 import { useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import PageShell from '@/components/layout/PageShell';
 import Tabs from '@/components/ui/Tabs';
 import NotificationCard from '@/components/common/NotificationCard';
@@ -21,7 +23,11 @@ const SORT_OPTIONS = [
 ];
 
 export default function NotificationsList() {
-  const [activeTab, setActiveTab] = useState('all');
+  const [searchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') ?? 'all';
+  const validTab   = NOTIFICATION_CATEGORIES.some((c) => c.value === initialTab) ? initialTab : 'all';
+
+  const [activeTab, setActiveTab] = useState(validTab);
   const [search,    setSearch]    = useState('');
   const [sort,      setSort]      = useState('date-desc');
   const [page,      setPage]      = useState(1);
@@ -77,9 +83,9 @@ export default function NotificationsList() {
 
   return (
     <PageShell
-      title="Notifications"
-      subtitle="Circulars, orders, press releases and recruitment notices"
-      breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Notifications' }]}
+      title="Notifications & News"
+      subtitle="Circulars, administrative orders, press releases, announcements and recruitment notices"
+      breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Notifications & News' }]}
     >
       {/* Category Tabs */}
       <Tabs

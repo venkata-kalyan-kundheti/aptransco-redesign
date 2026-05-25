@@ -27,9 +27,9 @@ export const ORG_TYPE = 'State Transmission Utility (STU)';
 export const REGULATOR = 'Andhra Pradesh Electricity Regulatory Commission (APERC)';
 
 // ── Branding ──────────────────────────────────────────────────────────────────
-export const LOGO_PATH    = '/logo.png';
+export const LOGO_PATH    = '/logo.svg';   // SVG shipped in public/
 export const OG_IMAGE_PATH = '/og-image.png';
-export const FAVICON_PATH  = '/favicon.ico';
+export const FAVICON_PATH  = '/favicon.svg';
 
 export const SITE_URL = 'https://aptransco.gov.in'; // Production canonical
 
@@ -116,10 +116,17 @@ export const QUICK_ACCESS_TILES = [
   },
   {
     id:       'notifications',
-    label:    'Notifications',
+    label:    'Notifications & News',
     href:     '/notifications',
     icon:     'BellAlertIcon',
     desc:     'Circulars, orders & press releases',
+  },
+  {
+    id:       'vendor',
+    label:    'Vendor Information',
+    href:     '/vendor',
+    icon:     'BuildingStorefrontIcon',
+    desc:     'Contractor registration & empanelment',
   },
   {
     id:       'rti',
@@ -177,11 +184,12 @@ export const FOOTER_LINKS = {
     { label: 'Contact Directory',  href: '/about/contacts' },
   ],
   information: [
-    { label: 'Tenders',          href: '/tenders' },
-    { label: 'Notifications',    href: '/notifications' },
-    { label: 'Careers',          href: '/careers' },
-    { label: 'Annual Reports',   href: '/reports/annual' },
-    { label: 'Document Library', href: '/documents' },
+    { label: 'Tenders',             href: '/tenders' },
+    { label: 'Notifications & News', href: '/notifications' },
+    { label: 'Careers',             href: '/careers' },
+    { label: 'Vendor Information',  href: '/vendor' },
+    { label: 'Annual Reports',      href: '/reports/annual' },
+    { label: 'Document Library',    href: '/documents' },
   ],
   compliance: [
     { label: 'RTI / Disclosures',   href: '/rti' },

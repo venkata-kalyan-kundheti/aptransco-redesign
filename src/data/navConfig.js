@@ -33,9 +33,10 @@ export const NAV_ITEMS = [
     label: 'Operations',
     href: '/network',
     children: [
-      { id: 'ops-network',  label: 'Transmission Network', href: '/network' },
-      { id: 'ops-projects', label: 'Projects',             href: '/projects' },
-      { id: 'ops-gridmap',  label: 'Grid Map',             href: '/grid-map' },
+      { id: 'ops-network',  label: 'Transmission Network',   href: '/network' },
+      { id: 'ops-projects', label: 'Projects',               href: '/projects' },
+      { id: 'ops-gridmap',  label: 'Grid Map',               href: '/grid-map' },
+      { id: 'ops-vendor',   label: 'Vendor & Contractors',   href: '/vendor' },
     ],
   },
   {
@@ -45,7 +46,7 @@ export const NAV_ITEMS = [
   },
   {
     id: 'notifications',
-    label: 'Notifications',
+    label: 'Notifications & News',
     href: '/notifications',
   },
   {
