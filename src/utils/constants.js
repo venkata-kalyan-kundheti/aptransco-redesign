@@ -201,6 +201,7 @@ export const FOOTER_LINKS = {
   utility: [
     { label: 'Search',                href: '/search' },
     { label: 'FAQ',                   href: '/faq' },
+    { label: 'Training Programmes',   href: '/training' },
     { label: 'Important Links',       href: '/links' },
     { label: 'Sitemap',               href: '/sitemap' },
     { label: 'Accessibility',         href: '/accessibility' },

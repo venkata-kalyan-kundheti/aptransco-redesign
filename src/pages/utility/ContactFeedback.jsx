@@ -51,10 +51,10 @@ const SUBJECT_OPTIONS = [
   'Other',
 ];
 
-function FieldError({ msg }) {
+function FieldError({ id, msg }) {
   if (!msg) return null;
   return (
-    <p className="text-xs text-red-600 mt-1 flex items-center gap-1" role="alert">
+    <p id={id} className="text-xs text-red-600 mt-1 flex items-center gap-1" role="alert" aria-live="polite">
       <ExclamationCircleIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
       {msg}
     </p>
@@ -134,26 +134,29 @@ export default function ContactFeedback() {
                 {/* Name */}
                 <div>
                   <label htmlFor="contact-name" className="block text-sm font-medium text-slate-700 mb-1">
-                    Full Name <span className="text-red-500">*</span>
+                    Full Name <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input id="contact-name" name="name" type="text" value={form.name}
                     onChange={handleChange} placeholder="Your full name"
                     className={`input ${errors.name ? 'border-red-400 focus:ring-red-400' : ''}`}
-                    aria-describedby={errors.name ? 'name-error' : undefined}
-                    aria-invalid={!!errors.name} />
-                  <FieldError msg={errors.name} />
+                    aria-describedby={errors.name ? 'err-name' : undefined}
+                    aria-invalid={!!errors.name}
+                    aria-required="true" />
+                  <FieldError id="err-name" msg={errors.name} />
                 </div>
 
                 {/* Email */}
                 <div>
                   <label htmlFor="contact-email" className="block text-sm font-medium text-slate-700 mb-1">
-                    Email Address <span className="text-red-500">*</span>
+                    Email Address <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <input id="contact-email" name="email" type="email" value={form.email}
                     onChange={handleChange} placeholder="you@example.com"
                     className={`input ${errors.email ? 'border-red-400 focus:ring-red-400' : ''}`}
-                    aria-invalid={!!errors.email} />
-                  <FieldError msg={errors.email} />
+                    aria-describedby={errors.email ? 'err-email' : undefined}
+                    aria-invalid={!!errors.email}
+                    aria-required="true" />
+                  <FieldError id="err-email" msg={errors.email} />
                 </div>
 
                 {/* Phone */}
@@ -164,40 +167,45 @@ export default function ContactFeedback() {
                   <input id="contact-phone" name="phone" type="tel" value={form.phone}
                     onChange={handleChange} placeholder="10-digit mobile number"
                     className={`input ${errors.phone ? 'border-red-400 focus:ring-red-400' : ''}`}
+                    aria-describedby={errors.phone ? 'err-phone' : undefined}
                     aria-invalid={!!errors.phone} />
-                  <FieldError msg={errors.phone} />
+                  <FieldError id="err-phone" msg={errors.phone} />
                 </div>
 
                 {/* Subject */}
                 <div>
                   <label htmlFor="contact-subject" className="block text-sm font-medium text-slate-700 mb-1">
-                    Subject <span className="text-red-500">*</span>
+                    Subject <span className="text-red-500" aria-hidden="true">*</span>
                   </label>
                   <select id="contact-subject" name="subject" value={form.subject}
                     onChange={handleChange}
                     className={`input ${errors.subject ? 'border-red-400 focus:ring-red-400' : ''}`}
-                    aria-invalid={!!errors.subject}>
+                    aria-describedby={errors.subject ? 'err-subject' : undefined}
+                    aria-invalid={!!errors.subject}
+                    aria-required="true">
                     <option value="">Select a subject…</option>
                     {SUBJECT_OPTIONS.map(opt => (
                       <option key={opt} value={opt}>{opt}</option>
                     ))}
                   </select>
-                  <FieldError msg={errors.subject} />
+                  <FieldError id="err-subject" msg={errors.subject} />
                 </div>
               </div>
 
               {/* Message */}
               <div>
                 <label htmlFor="contact-message" className="block text-sm font-medium text-slate-700 mb-1">
-                  Message <span className="text-red-500">*</span>
+                  Message <span className="text-red-500" aria-hidden="true">*</span>
                 </label>
                 <textarea id="contact-message" name="message" rows={5} value={form.message}
                   onChange={handleChange} placeholder="Describe your query or feedback in detail…"
                   className={`input resize-none ${errors.message ? 'border-red-400 focus:ring-red-400' : ''}`}
-                  aria-invalid={!!errors.message} />
+                  aria-describedby={errors.message ? 'err-message' : 'msg-hint'}
+                  aria-invalid={!!errors.message}
+                  aria-required="true" />
                 <div className="flex justify-between mt-1">
-                  <FieldError msg={errors.message} />
-                  <span className="text-xs text-slate-300 ml-auto">{form.message.length} chars</span>
+                  <FieldError id="err-message" msg={errors.message} />
+                  <span id="msg-hint" className="text-xs text-slate-300 ml-auto" aria-live="polite">{form.message.length} chars</span>
                 </div>
               </div>
 

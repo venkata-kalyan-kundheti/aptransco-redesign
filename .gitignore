@@ -1,7 +1,7 @@
 node_modules
 .env
 
-# Competition PDF — do not commit
+
 real.pdf
 
 # Build output

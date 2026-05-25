@@ -176,28 +176,29 @@ export default function Careers() {
       <section className="mb-12" aria-labelledby="calendar-heading">
         <h2 id="calendar-heading" className="section-title mb-2">Examination Calendar</h2>
         <p className="section-subtitle mb-6">Upcoming tests and document verification schedules</p>
-        <div className="card overflow-hidden">
-          <table className="min-w-full text-sm">
+        <div className="table-responsive">
+          <table className="table-base">
             <thead className="bg-navy-700 text-white">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">Post / Event</th>
-                <th className="px-4 py-3 text-left font-semibold">Date</th>
-                <th className="px-4 py-3 text-left font-semibold">Venue</th>
+                <th className="table-th text-white">Post / Event</th>
+                <th className="table-th text-white">Date</th>
+                <th className="table-th text-white">Venue</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {EXAM_CALENDAR.map((exam, i) => (
                 <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                  <td className="px-4 py-3 font-medium text-navy-800">{exam.post}</td>
-                  <td className="px-4 py-3 text-slate-700">
+                  <td className="table-td font-medium text-navy-800">{exam.post}</td>
+                  <td className="table-td text-slate-700">
                     <time dateTime={exam.date}>{formatDate(exam.date)}</time>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{exam.venue}</td>
+                  <td className="table-td text-slate-600">{exam.venue}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
       </section>
 
       {/* ── How to Apply ──────────────────────────────────────────────────── */}

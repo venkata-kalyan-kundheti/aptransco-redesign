@@ -1,1 +1,0 @@
-import{j as r}from"./react-vendor-DSKy_jo4.js";import{D as t}from"./_DepartmentTemplate-Dyg2zwko.js";import"./router-vendor-1GS4ssWD.js";import"./PageShell-DzaIoCer.js";import"./icons-vendor-wC02zTb8.js";import"./departments-C5aKUW-Z.js";function a(){return r.jsx(t,{slug:"grid-transmission"})}export{a as default};

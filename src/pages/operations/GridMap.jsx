@@ -52,9 +52,10 @@ export default function GridMap() {
         <section aria-labelledby="map-heading" className="flex-1">
           <h2 id="map-heading" className="section-title mb-4">Transmission Network Schematic</h2>
           <div className="card p-4">
+            <div className="min-h-[300px] sm:min-h-0">
             <svg
               viewBox="0 0 100 100"
-              className="w-full max-w-2xl mx-auto"
+              className="w-full max-w-2xl mx-auto block"
               role="img"
               aria-label="Schematic map of AP transmission network showing 3 zones, key substations and 400kV/220kV/132kV corridors"
             >
@@ -128,6 +129,7 @@ export default function GridMap() {
                 </g>
               </g>
             </svg>
+            </div>
             <p className="text-xs text-slate-400 text-center mt-2">
               Schematic representation only — not to geographic scale. For detailed GIS map, visit SLDC portal.
             </p>
@@ -166,10 +168,9 @@ export default function GridMap() {
             </div>
           </section>
 
-          {/* Substation Breakup */}
           <section aria-labelledby="ss-breakup-heading">
             <h2 id="ss-breakup-heading" className="section-title mb-4">Substation Breakup</h2>
-            <div className="card overflow-hidden">
+            <div className="table-responsive">
               <table className="table-base">
                 <thead>
                   <tr>

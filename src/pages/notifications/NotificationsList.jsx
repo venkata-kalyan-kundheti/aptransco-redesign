@@ -3,7 +3,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * Features: Tabs (All/Circulars/Orders/Press Releases/Recruitment/General),
  *           search, date sort, NotificationCard grid, Pagination, EmptyState.
- *           Reads ?tab= URL param so external links can deep-link to a tab.
+ *           Deep-link: ?tab=<value> OR ?category=<value> (both supported).
  */
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -24,7 +24,8 @@ const SORT_OPTIONS = [
 
 export default function NotificationsList() {
   const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get('tab') ?? 'all';
+  // Support ?tab= and ?category= as equivalent deep-link params
+  const initialTab = searchParams.get('tab') ?? searchParams.get('category') ?? 'all';
   const validTab   = NOTIFICATION_CATEGORIES.some((c) => c.value === initialTab) ? initialTab : 'all';
 
   const [activeTab, setActiveTab] = useState(validTab);

@@ -1,1 +1,0 @@
-import{j as t}from"./react-vendor-DSKy_jo4.js";import{D as o}from"./_DepartmentTemplate-Dyg2zwko.js";import"./router-vendor-1GS4ssWD.js";import"./PageShell-DzaIoCer.js";import"./icons-vendor-wC02zTb8.js";import"./departments-C5aKUW-Z.js";function a(){return t.jsx(o,{slug:"finance-accounts"})}export{a as default};
