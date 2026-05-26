@@ -102,7 +102,83 @@
   --z-toast:    600;
 }
 
-/* ─── 3. Base layer overrides ─────────────────────────────────────────────── */
+/* ─── 3. Accessibility: font-size overrides (data-font-size on <html>) ──────
+   Scaling the root font-size causes every rem-based value to grow proportionally.
+   This covers all text, spacing, icons, and touch targets simultaneously.
+   ─────────────────────────────────────────────────────────────────────────── */
+html[data-font-size="large"]   { font-size: 112.5% !important; } /* ~18px */
+html[data-font-size="x-large"] { font-size: 125%   !important; } /* ~20px */
+
+/* ─── Accessibility: high-contrast theme (data-contrast="high" on <html>) ───
+   Overrides CSS design tokens to meet WCAG AAA contrast ratios.
+   Uses !important to override Tailwind utilities and inline styles.
+   ─────────────────────────────────────────────────────────────────────────── */
+html[data-contrast="high"] {
+  /* Push all navy shades to true black for maximum contrast */
+  --clr-navy-50:  #e8e8e8;
+  --clr-navy-100: #cccccc;
+  --clr-navy-200: #aaaaaa;
+  --clr-navy-300: #888888;
+  --clr-navy-400: #555555;
+  --clr-navy-500: #111111;
+  --clr-navy-600: #000000;
+  --clr-navy-700: #000000;
+  --clr-navy-800: #000000;
+  --clr-navy-900: #000000;
+
+  /* Gold becomes a pure amber for maximum readability */
+  --clr-gold-400: #cc7700;
+  --clr-gold-500: #aa5500;
+
+  /* Slate text → near-black */
+  --clr-slate-400: #333333;
+  --clr-slate-500: #222222;
+  --clr-slate-700: #000000;
+
+  /* Shadows become stronger borders */
+  --shadow-card:    0 0 0 2px #000;
+  --shadow-card-md: 0 0 0 3px #000;
+  --shadow-nav:     0 0 0 2px #000;
+}
+
+/* High contrast: force body background pure white, text pure black */
+html[data-contrast="high"] body {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* High contrast: all links must be underlined and dark */
+html[data-contrast="high"] a {
+  color: #000066 !important;
+  text-decoration: underline !important;
+}
+
+/* High contrast: buttons get strong black borders */
+html[data-contrast="high"] .btn-primary {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+html[data-contrast="high"] .btn-secondary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* High contrast: cards get black border */
+html[data-contrast="high"] .card,
+html[data-contrast="high"] .card-hover {
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+/* High contrast: white text on dark sections → invert */
+html[data-contrast="high"] section.bg-navy-700,
+html[data-contrast="high"] section.bg-navy-800 {
+  background: #000000 !important;
+}
+
+/* ─── 4. Base layer overrides ─────────────────────────────────────────────── */
 @layer base {
   /*
     font-display: optional — system font renders immediately while Inter loads.

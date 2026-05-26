@@ -25,12 +25,12 @@ import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  GlobeAltIcon,
   PhoneIcon,
 } from '@heroicons/react/24/outline';
 
 import { NAV_ITEMS, getParentNavItem } from '@/data/navConfig';
 import { ORG_FULL_NAME, ORG_SHORT_NAME, TOP_BAR_LINKS, LOGO_PATH } from '@/utils/constants';
+import { useAccessibility } from '@/hooks/useAccessibility';
 
 // ── Tiny hook: close on outside click ─────────────────────────────────────────
 function useOutsideClick(ref, onClose) {
@@ -57,7 +57,11 @@ function useEscape(onClose) {
 // ═════════════════════════════════════════════════════════════════════════════
 // TOP UTILITY BAR
 // ═════════════════════════════════════════════════════════════════════════════
-function TopBar() {
+// ── Font size label map ────────────────────────────────────────────────────────
+const FONT_LABEL = { normal: 'Normal text size', large: 'Large text size', 'x-large': 'Extra large text size' };
+const NEXT_FONT  = { normal: 'large', large: 'x-large', 'x-large': 'normal' };
+
+function TopBar({ fontSize, highContrast, onCycleFont, onToggleContrast }) {
   return (
     <div className="bg-navy-700 text-slate-200" role="complementary" aria-label="Utility links">
       <div className="container-site">
@@ -90,7 +94,7 @@ function TopBar() {
             </ul>
           </nav>
 
-          {/* Right: ISO badge + accessibility selector */}
+          {/* Right: ISO badge + accessibility controls */}
           <div className="hidden sm:flex items-center gap-3">
             <span
               className="border border-navy-500 rounded px-2 py-0.5 text-2xs tracking-wide font-medium text-slate-300"
@@ -99,20 +103,47 @@ function TopBar() {
               ISO 9001:2015
             </span>
             <span className="text-slate-500" aria-hidden="true">|</span>
+
+            {/* ── Text size toggle ──────────────────────────────────────── */}
             <button
-              className="hover:text-gold-300 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 rounded"
-              aria-label="Adjust text size"
-              title="Adjust text size"
+              onClick={onCycleFont}
+              className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded transition-colors duration-150
+                focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400
+                ${fontSize !== 'normal'
+                  ? 'bg-gold-400 text-navy-900 font-bold'
+                  : 'hover:text-gold-300'}`}
+              aria-label={`Text size: ${FONT_LABEL[fontSize]}. Click to switch to ${NEXT_FONT[fontSize]}`}
+              aria-pressed={fontSize !== 'normal'}
+              title={`Text size: ${fontSize} (click to change)`}
             >
-              <span className="text-2xs font-bold">A</span>
-              <span className="text-xs font-bold ml-0.5">A</span>
+              <span className="text-[10px] font-bold leading-none">A</span>
+              <span className="text-[13px] font-bold leading-none">A</span>
+              {/* Active indicator dot */}
+              {fontSize !== 'normal' && (
+                <span className="ml-0.5 text-[9px] font-black leading-none">
+                  {fontSize === 'large' ? '²' : '³'}
+                </span>
+              )}
             </button>
+
+            {/* ── High contrast toggle ─────────────────────────────────── */}
             <button
-              className="hover:text-gold-300 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400 rounded"
-              aria-label="Switch to high contrast mode"
-              title="High contrast"
+              onClick={onToggleContrast}
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition-colors duration-150
+                focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold-400
+                ${highContrast
+                  ? 'bg-gold-400 text-navy-900 font-bold'
+                  : 'hover:text-gold-300'}`}
+              aria-label={highContrast ? 'High contrast is ON — click to disable' : 'Enable high contrast mode'}
+              aria-pressed={highContrast}
+              title={highContrast ? 'High contrast: ON' : 'High contrast: OFF'}
             >
-              <GlobeAltIcon className="w-3.5 h-3.5 inline" aria-hidden="true" />
+              {/* Half-filled circle icon — classic contrast symbol */}
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
+                <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M7 1a6 6 0 0 1 0 12V1z" fill="currentColor" />
+              </svg>
+              <span className="text-2xs font-semibold">HC</span>
             </button>
           </div>
         </div>
@@ -653,6 +684,9 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen]         = useState(false);
 
+  // ── Accessibility controls ─────────────────────────────────────────────
+  const { fontSize, highContrast, cycleFont, toggleContrast } = useAccessibility();
+
   const openMobileMenu  = useCallback(() => setMobileMenuOpen(true),  []);
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
   const openSearch      = useCallback(() => setSearchOpen(true),      []);
@@ -665,13 +699,27 @@ export default function Header() {
         Skip to main content
       </a>
 
+      {/* ── Live region: announces accessibility changes to screen readers */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        id="a11y-announcer"
+      />
+
       {/* ── Sticky header wrapper ──────────────────────────────────────── */}
       <header
         role="banner"
         className="sticky top-0 z-header shadow-header"
         aria-label="Site header"
       >
-        <TopBar />
+        <TopBar
+          fontSize={fontSize}
+          highContrast={highContrast}
+          onCycleFont={cycleFont}
+          onToggleContrast={toggleContrast}
+        />
         <LogoBar onSearchOpen={openSearch} />
         <DesktopNavbar onMobileMenuOpen={openMobileMenu} />
       </header>
